@@ -65,15 +65,27 @@ int main()
     nodelay(stdscr,TRUE); // No bloquear programa para esperar una tecla
   
     int positionSelect = 1; // 0 1 2 3
-    int colaLen = 1, prevInput = 0;
+    int colaLen = 0, contadorLen = 0;
+    //colalen Empieza en 0
+
+    int anteriorX, anteriorY;
+    int puntaje = 0;
     while ((input = getch()) != KEY_F(4) )
     {
         getmaxyx(stdscr,row,col);  /// obtener x & Y de la pantalla/Terminal
         mvprintw(0,0,"La Ventana Tiene %d Filas y %d Columnas",row,col);
-        mvprintw(Sk.position[1] - colaLen,Sk.position[0]- colaLen," ");
+        mvprintw(1,0,"Puntaje: %d",puntaje);
+        
         /// Espera entrada (caracter)
         //BUG DE ENTRADAS EJ: PARECE QUE _ guarda en memoria las entradas
         
+        if(contadorLen == colaLen){
+            mvprintw(anteriorY ,anteriorX ," ");
+            anteriorX = Sk.position[0];
+            anteriorY = Sk.position[1];
+            contadorLen = 0;
+        }
+
         switch(input)
         {   case KEY_LEFT:
                 if(positionSelect != 1)
@@ -92,8 +104,7 @@ int main()
                     positionSelect = 3;
                 break;
         }
-        input = 0;
-        
+        contadorLen += 1;
 
 
         
@@ -127,7 +138,7 @@ int main()
 
         mvaddch(Sk.position[1],Sk.position[0],ACS_TTEE); //snake
         refresh();
-        usleep(300000);
+        usleep(200000);
     }
     
     
